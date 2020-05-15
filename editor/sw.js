@@ -218,7 +218,7 @@ async function cacheFirst( request ) {
 
 	if ( cachedResponse === undefined ) {
 
-		console.error( '[SW] Not cached:', request.url );
+		console.debug( '[SW] Not cached:', request.url );
 		return fetch( request );
 
 	}
