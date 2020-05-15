@@ -61,7 +61,52 @@
         "height": 1414
       }
     ],
-		"materials": [],
+		"materials": [
+      {
+        "name": "SkyMaterial",
+        "metadata": {
+          "version": 4.5,
+          "type": "Material",
+          "generator": "Material.toJSON"
+        },
+        "uuid": "39F4E328-B581-4C4D-8060-4A25CE77CB8F",
+        "type": "ShaderMaterial",
+        "side": 1,
+        "depthFunc": 3,
+        "depthTest": true,
+        "depthWrite": true,
+        "stencilWrite": false,
+        "stencilFunc": 519,
+        "stencilRef": 0,
+        "stencilMask": 255,
+        "stencilFail": 7680,
+        "stencilZFail": 7680,
+        "stencilZPass": 7680,
+        "uniforms": {
+          "luminance": {
+            "value": 1
+          },
+          "turbidity": {
+            "value": 6
+          },
+          "reileigh": {
+            "value": 0.5
+          },
+          "mieCoefficient": {
+            "value": 0.005
+          },
+          "mieDirectionalG": {
+            "value": 0.8
+          },
+          "sunPosition": {
+            "type": "v3",
+            "value": [-350, 1000, 350]
+          }
+        },
+        "vertexShader": "varying vec3 vWorldPosition;\nvoid main() {\nvec4 worldPosition = modelMatrix * vec4( position, 1.0 );\nvWorldPosition = worldPosition.xyz;\ngl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n}",
+        "fragmentShader": "uniform vec3 sunPosition;\nvarying vec3 vWorldPosition;\nvec3 cameraPos = vec3(0., 0., 0.);\nuniform float luminance;\nuniform float turbidity;\nuniform float reileigh;\nuniform float mieCoefficient;\nuniform float mieDirectionalG;\n// constants for atmospheric scattering\nconst float e = 2.71828182845904523536028747135266249775724709369995957;\nconst float pi = 3.141592653589793238462643383279502884197169;\nconst float n = 1.0003; // refractive index of air\nconst float N = 2.545E25; // number of molecules per unit volume for air at\n// 288.15K and 1013mb (sea level -45 celsius)\nconst float pn = 0.035;\t// depolatization factor for standard air\n// wavelength of used primaries, according to preetham\nconst vec3 lambda = vec3(680E-9, 550E-9, 450E-9);\n// mie stuff\n// K coefficient for the primaries\nconst vec3 K = vec3(0.686, 0.678, 0.666);\nconst float v = 4.0;\n// optical length at zenith for molecules\nconst float rayleighZenithLength = 8.4E3;\nconst float mieZenithLength = 1.25E3;\nconst vec3 up = vec3(0.0, 1.0, 0.0);\nconst float EE = 1000.0;\nconst float sunAngularDiameterCos = 0.999956676946448443553574619906976478926848692873900859324;\n// 66 arc seconds -> degrees, and the cosine of that\n// earth shadow hack\nconst float cutoffAngle = pi/1.95;\nconst float steepness = 1.5;\nvec3 totalRayleigh(vec3 lambda)\n{\nreturn (8.0 * pow(pi, 3.0) * pow(pow(n, 2.0) - 1.0, 2.0) * (6.0 + 3.0 * pn)) / (3.0 * N * pow(lambda, vec3(4.0)) * (6.0 - 7.0 * pn));\n}\n// A simplied version of the total Reayleigh scattering to works on browsers that use ANGLE\nvec3 simplifiedRayleigh()\n{\nreturn 0.0005 / vec3(94, 40, 18);\n}\nfloat rayleighPhase(float cosTheta)\n{\t \nreturn (3.0 / (16.0*pi)) * (1.0 + pow(cosTheta, 2.0));\n//\treturn (1.0 / (3.0*pi)) * (1.0 + pow(cosTheta, 2.0));\n//\treturn (3.0 / 4.0) * (1.0 + pow(cosTheta, 2.0));\n}\nvec3 totalMie(vec3 lambda, vec3 K, float T)\n{\nfloat c = (0.2 * T ) * 10E-18;\nreturn 0.434 * c * pi * pow((2.0 * pi) / lambda, vec3(v - 2.0)) * K;\n}\nfloat hgPhase(float cosTheta, float g)\n{\nreturn (1.0 / (4.0*pi)) * ((1.0 - pow(g, 2.0)) / pow(1.0 - 2.0*g*cosTheta + pow(g, 2.0), 1.5));\n}\nfloat sunIntensity(float zenithAngleCos)\n{\nreturn EE * max(0.0, 1.0 - 1.0 / exp((cutoffAngle - acos(zenithAngleCos)) / steepness));\n}\n// float logLuminance(vec3 c)\n// {\n// \treturn log(c.r * 0.2126 + c.g * 0.7152 + c.b * 0.0722);\n// }\n// Filmic ToneMapping http://filmicgames.com/archives/75\nconst float A = 0.15;\nconst float B = 0.50;\nconst float C = 0.10;\nconst float D = 0.20;\nconst float E = 0.02;\nconst float F = 0.30;\nconst float W = 1000.0;\nvec3 Uncharted2Tonemap(vec3 x)\n{\nreturn ((x * (0.15 * x + 0.05) + 0.004) / (x * (0.15 * x + 0.5) + 0.06)) - E / F;\n}\nvoid main() \n{\nvec3 sunDirection = normalize(sunPosition);\nfloat reileighCoefficient = reileigh;\nfloat sunfade = 1.0-clamp(1.0-exp((sunPosition.y/450000.0)),0.0,1.0);\n// luminance =  1.0 ;// vWorldPosition.y / 450000. + 0.5; //sunPosition.y / 450000. * 1. + 0.5;\n// gl_FragColor = vec4(sunfade, sunfade, sunfade, 1.0);\nreileighCoefficient = reileighCoefficient - (1.0* (1.0-sunfade));\nfloat sunE = sunIntensity(dot(sunDirection, up));\n// extinction (absorbtion + out scattering) \n// rayleigh coefficients\nvec3 betaR = simplifiedRayleigh() * reileighCoefficient;\n// mie coefficients\nvec3 betaM = totalMie(lambda, K, turbidity) * mieCoefficient;\n// optical length\n// cutoff angle at 90 to avoid singularity in next formula.\nfloat zenithAngle = acos(max(0.0, dot(up, normalize(vWorldPosition - cameraPos))));\nfloat sR = rayleighZenithLength / (cos(zenithAngle) + 0.15 * pow(93.885 - ((zenithAngle * 180.0) / pi), -1.253));\nfloat sM = mieZenithLength / (cos(zenithAngle) + 0.15 * pow(93.885 - ((zenithAngle * 180.0) / pi), -1.253));\n// combined extinction factor\t\nvec3 Fex = exp(-(betaR * sR + betaM * sM));\n// in scattering\nfloat cosTheta = dot(normalize(vWorldPosition - cameraPos), sunDirection);\nfloat rPhase = rayleighPhase(cosTheta*0.5+0.5);\nvec3 betaRTheta = betaR * rPhase;\nfloat mPhase = hgPhase(cosTheta, mieDirectionalG);\nvec3 betaMTheta = betaM * mPhase;\nvec3 Lin = pow(sunE * ((betaRTheta + betaMTheta) / (betaR + betaM)) * (1.0 - Fex),vec3(1.5));\nLin *= mix(vec3(1.0),pow(sunE * ((betaRTheta + betaMTheta) / (betaR + betaM)) * Fex,vec3(1.0/2.0)),clamp(pow(1.0-dot(up, sunDirection),5.0),0.0,1.0));\n//nightsky\n// vec3 L0 = texture2D(skySampler, uv).rgb+0.1 * Fex;\nvec3 L0 = vec3(0.1) * Fex;\n// composition + solar disc\n//if (cosTheta > sunAngularDiameterCos)\nfloat sundisk = smoothstep(sunAngularDiameterCos,sunAngularDiameterCos+0.00002,cosTheta);\n// if (normalize(vWorldPosition - cameraPos).y>0.0)\nL0 += (sunE * 19000.0 * Fex)*sundisk;\nvec3 whiteScale = 1.0/Uncharted2Tonemap(vec3(W));\nvec3 texColor = (Lin+L0);   \ntexColor *= 0.04 ;\ntexColor += vec3(0.0,0.001,0.0025)*0.3;\nfloat g_fMaxLuminance = 1.0;\nfloat fLumScaled = 0.1 / luminance;     \nfloat fLumCompressed = (fLumScaled * (1.0 + (fLumScaled / (g_fMaxLuminance * g_fMaxLuminance)))) / (1.0 + fLumScaled); \nfloat ExposureBias = fLumCompressed;\nvec3 curr = Uncharted2Tonemap((log2(2.0/pow(luminance,4.0)))*texColor);\nvec3 color = curr*whiteScale;\nvec3 retColor = pow(color,vec3(1.0/(1.2+(1.2*sunfade))));\ngl_FragColor.rgb = retColor;\ngl_FragColor.a = 1.0;\n}"
+      }
+    ],
 		"object": {
 			"uuid": "5FC9ACA9-2A93-474D-AA32-FACC76551914",
 			"type": "Scene",
@@ -75,7 +120,8 @@
           "name": "Sky",
           "layers": 1,
           "matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-          "geometry": "5646114B-4AFB-402E-BA4C-99182A9A7123"
+          "geometry": "5646114B-4AFB-402E-BA4C-99182A9A7123",
+          "material": "39F4E328-B581-4C4D-8060-4A25CE77CB8F"
         },
         {
           "uuid": "80341DB0-876E-11EA-BC55-0242AC130003",
