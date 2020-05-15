@@ -34,7 +34,33 @@
 			"type": "Object",
 			"generator": "Object3D.toJSON"
 		},
-		"geometries": [],
+		"geometries": [
+      {
+        "metadata": {
+          "version": 4.5,
+          "type": "BufferGeometry",
+          "generator": "BufferGeometry.toJSON"
+        },
+        "uuid": "5646114B-4AFB-402E-BA4C-99182A9A7123",
+        "type": "SphereBufferGeometry",
+        "name": "SkyGeometry",
+        "radius": 3000,
+        "widthSegments": 25,
+        "heightSegments": 25
+      },
+      {
+        "metadata": {
+          "version": 4.5,
+          "type": "BufferGeometry",
+          "generator": "BufferGeometry.toJSON"
+        },
+        "uuid": "3DBC1E54-A8DE-4BAE-865B-8819ABBAE9E2",
+        "type": "PlaneBufferGeometry",
+        "name": "TerrainGeometry",
+        "width": 1414,
+        "height": 1414
+      }
+    ],
 		"materials": [],
 		"object": {
 			"uuid": "5FC9ACA9-2A93-474D-AA32-FACC76551914",
@@ -42,7 +68,25 @@
 			"name": "Scene",
 			"layers": 1,
 			"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
-			"children": [],
+			"children": [
+        {
+          "uuid": "c535f0ae-876a-11ea-bc55-0242ac130003",
+          "type": "Mesh",
+          "name": "Sky",
+          "layers": 1,
+          "matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+          "geometry": "5646114B-4AFB-402E-BA4C-99182A9A7123"
+        },
+        {
+          "uuid": "80341DB0-876E-11EA-BC55-0242AC130003",
+          "type": "Mesh",
+          "name": "Terrain",
+          "layers": 1,
+          "matrix": [1, 0, 0, 0, 0, -2.220446049250313e-16, -1, 0, 0, 1, -2.220446049250313e-16, 0, 0, 0, 0, 1],
+          "geometry": "3DBC1E54-A8DE-4BAE-865B-8819ABBAE9E2",
+          "receiveShadow": true
+        }
+      ],
 			"background": 11184810
 		}
 	},
