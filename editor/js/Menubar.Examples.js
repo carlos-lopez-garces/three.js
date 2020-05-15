@@ -29,7 +29,8 @@ var MenubarExamples = function ( editor ) {
 		{ title: 'menubar/examples/Camera', file: 'camera.app.json' },
 		{ title: 'menubar/examples/Particles', file: 'particles.app.json' },
 		{ title: 'menubar/examples/Pong', file: 'pong.app.json' },
-		{ title: 'menubar/examples/Shaders', file: 'shaders.app.json' }
+    { title: 'menubar/examples/Shaders', file: 'shaders.app.json' },
+    { title: 'menubar/examples/HOVER', file: 'hover.app.json' }
 	];
 
 	var loader = new THREE.FileLoader();
