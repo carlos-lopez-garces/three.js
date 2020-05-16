@@ -185,7 +185,8 @@ const assets = [
 	'./examples/particles.app.json',
 	'./examples/pong.app.json',
   './examples/shaders.app.json',
-  './examples/HOVER.app.json'
+  './examples/hover.app.json',
+  './examples/hover_nighttime.app.json'
 
 ];
 

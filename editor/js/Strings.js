@@ -74,6 +74,7 @@ var Strings = function ( config ) {
 			'menubar/examples/Pong': 'Pong',
       'menubar/examples/Shaders': 'Shaders',
       'menubar/examples/HOVER': 'HOVER Daytime',
+      'menubar/examples/HOVERNighttime': 'HOVER Nighttime',
 
 			'menubar/help': 'Help',
 			'menubar/help/source_code': 'Source Code',
@@ -389,6 +390,7 @@ var Strings = function ( config ) {
 			'menubar/examples/Pong': 'Pong',
       'menubar/examples/Shaders': 'Shaders',
       'menubar/examples/HOVER': 'HOVER Daytime',
+      'menubar/examples/HOVERNighttime': 'HOVER Nighttime',
 
 			'menubar/help': 'Aide',
 			'menubar/help/source_code': 'Code Source',
@@ -704,6 +706,7 @@ var Strings = function ( config ) {
 			'menubar/examples/Pong': '乒乓球',
       'menubar/examples/Shaders': '着色器',
       'menubar/examples/HOVER': 'HOVER Daytime',
+      'menubar/examples/HOVERNighttime': 'HOVER Nighttime',
 
 			'menubar/help': '帮助',
 			'menubar/help/source_code': '源码',
