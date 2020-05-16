@@ -209,6 +209,7 @@
     "textures": [{
       "uuid": "FA77A229-E04C-486A-B0EC-803E03CE8564",
       "name": "CloudsTexture",
+      "image": "66BE77DC-B7CB-4C84-B685-DDCC506C4015",
       "mapping": 300,
       "repeat": [1, 1],
       "offset": [0, 0],
@@ -225,6 +226,12 @@
       "premultiplyAlpha": false,
       "unpackAlignment": 4
     }],
+    "images": [
+      {
+        "uuid": "66BE77DC-B7CB-4C84-B685-DDCC506C4015",
+        "url": "https://mrdoob.com/lab/javascript/webgl/clouds/cloud10.png"
+      }
+    ],
     "object": {
       "uuid": "5FC9ACA9-2A93-474D-AA32-FACC76551914",
       "type": "Scene",
