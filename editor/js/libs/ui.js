@@ -1347,4 +1347,23 @@ UIListbox.ListboxItem = function ( parent ) {
 UIListbox.ListboxItem.prototype = Object.create( UIElement.prototype );
 UIListbox.ListboxItem.prototype.constructor = UIListbox.ListboxItem;
 
-export { UIElement, UISpan, UIDiv, UIRow, UIPanel, UIText, UIInput, UITextArea, UISelect, UICheckbox, UIColor, UINumber, UIInteger, UIBreak, UIHorizontalRule, UIButton, UITabbedPanel, UIListbox };
+// UIImage
+
+var UIImage = function ( src ) {
+
+	UIElement.call( this );
+
+	var dom = document.createElement( 'img' );
+  dom.src = src;
+  dom.style.verticalAlign = 'middle';
+
+	this.dom = dom;
+
+	return this;
+
+};
+
+UIImage.prototype = Object.create( UIElement.prototype );
+UIImage.prototype.constructor = UIImage;
+
+export { UIElement, UISpan, UIDiv, UIRow, UIPanel, UIText, UIInput, UITextArea, UISelect, UICheckbox, UIColor, UINumber, UIInteger, UIBreak, UIHorizontalRule, UIButton, UITabbedPanel, UIListbox, UIImage };

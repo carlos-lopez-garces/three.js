@@ -4,7 +4,7 @@
 
 import * as THREE from '../../build/three.module.js';
 
-import { UIPanel, UIText } from './libs/ui.js';
+import { UIPanel, UIText, UIImage } from './libs/ui.js';
 import { UIBoolean } from './libs/ui.three.js';
 
 var MenubarStatus = function ( editor ) {
@@ -14,8 +14,7 @@ var MenubarStatus = function ( editor ) {
 	var container = new UIPanel();
 	container.setClass( 'menu right' );
 
-	var autosave = new UIBoolean( editor.config.getKey( 'autosave' ), strings.getKey( 'menubar/status/autosave' ) );
-	autosave.text.setColor( '#888' );
+  var autosave = new UIBoolean( editor.config.getKey( 'autosave' ), strings.getKey( 'menubar/status/autosave' ) );
 	autosave.onChange( function () {
 
 		var value = this.getValue();
@@ -42,11 +41,23 @@ var MenubarStatus = function ( editor ) {
 		autosave.text.setTextDecoration( 'none' );
 
 	} );
-
-	var version = new UIText( 'r' + THREE.REVISION );
-	version.setClass( 'title' );
+  
+  var credits = new UIText( 'powered by' );
+	credits.setClass( 'title' );
+	credits.setOpacity( 0.5 );
+  container.add( credits );
+  
+  var threejsLogo = new UIText( 'three.js' );
+  threejsLogo.setClass( 'title' );
+  threejsLogo.dom.style.fontFamily = 'Roboto Mono, monospace';
+  threejsLogo.setOpacity( 0.5 );
+  container.add( threejsLogo );
+  
+  var version = new UIText( 'r' + THREE.REVISION );
+  version.setClass( 'title' );
+  version.dom.style.fontFamily = 'Roboto Mono, monospace';
 	version.setOpacity( 0.5 );
-	container.add( version );
+  container.add( version );
 
 	return container;
 

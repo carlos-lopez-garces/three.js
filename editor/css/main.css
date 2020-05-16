@@ -7,7 +7,8 @@ html {
 }
 
 body {
-	font-family: Helvetica, Arial, sans-serif;
+  /* HOVER "core brand" font. */
+	font-family: 'Avenir Next';
 	font-size: 14px;
 	margin: 0;
 	overflow: hidden;
@@ -326,8 +327,9 @@ select {
 		text-align: right;
 	}
 
+    /* Top menu bar main level. */
 		#menubar .menu .title {
-			display: inline-block;
+      display: inline-block;
 			color: #888;
 			margin: 0;
 			padding: 8px;
@@ -583,25 +585,53 @@ select {
 
 	/* UI */
 
-	#menubar {
-		background: #111;
-	}
+    #logo {
+      /* background-image: url('../images/hover-logo-full-white.png'); */
+      background-repeat: no-repeat;
+      height: 23px;
+      width: auto;
+      margin: 0;
+      padding-left: 8px;
+      padding-top: 2px;
+      cursor: auto;
+    }
 
+	#menubar {
+    /* Top menu bar. Color doesn't affect drop-down entries. */
+		background: #247DDC;
+  }
+  
+      /* Top menu bar main level. */
+      #menubar .menu .title {
+        display: inline-block;
+        color: #fff;
+        margin: 0;
+        padding: 8px;
+        line-height: 16px;
+      }
+  
+      /* Top menu bar entries. */
 			#menubar .menu .options {
-				background: #111;
+				background: #5097e3;
 			}
 
 				#menubar .menu .options hr {
-					border-color: #222;
+					border-color: #fff;
 				}
 
+        /* Text of drop-down entries. */
 				#menubar .menu .options .option {
-					color: #888;
+					color: #fff;
 				}
 
 			#menubar .menu .options .inactive {
-				color: #444;
-			}
+        color: #fff;
+				opacity: 0.50;
+      }
+      
+      #menubar .menu .options .option:hover {
+        background-color: #7cb1ea;
+      }
 
 	#sidebar {
 		background-color: #111;
