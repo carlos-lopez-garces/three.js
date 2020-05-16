@@ -73,7 +73,7 @@ var Strings = function ( config ) {
 			'menubar/examples/Particles': 'Particles',
 			'menubar/examples/Pong': 'Pong',
       'menubar/examples/Shaders': 'Shaders',
-      'menubar/examples/HOVER': 'HOVER',
+      'menubar/examples/HOVER': 'HOVER Daytime',
 
 			'menubar/help': 'Help',
 			'menubar/help/source_code': 'Source Code',
@@ -388,7 +388,7 @@ var Strings = function ( config ) {
 			'menubar/examples/Particles': 'Particles',
 			'menubar/examples/Pong': 'Pong',
       'menubar/examples/Shaders': 'Shaders',
-      'menubar/examples/HOVER': 'HOVER',
+      'menubar/examples/HOVER': 'HOVER Daytime',
 
 			'menubar/help': 'Aide',
 			'menubar/help/source_code': 'Code Source',
@@ -703,7 +703,7 @@ var Strings = function ( config ) {
 			'menubar/examples/Particles': '粒子',
 			'menubar/examples/Pong': '乒乓球',
       'menubar/examples/Shaders': '着色器',
-      'menubar/examples/HOVER': 'HOVER',
+      'menubar/examples/HOVER': 'HOVER Daytime',
 
 			'menubar/help': '帮助',
 			'menubar/help/source_code': '源码',
