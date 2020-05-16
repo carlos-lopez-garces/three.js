@@ -316,6 +316,69 @@
           "matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
           "geometry": "75925809-FE31-4034-8A53-CC515F592320",
           "material": "1D00597B-0134-4208-A470-B49C0299FF92"
+        },
+        {
+          "uuid": "06E781C6-C9B6-48EA-BF28-7DACAEE9F191",
+          "type": "AmbientLight",
+          "name": "Ambient Light",
+          "layers": 1,
+          "matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+          "color": 11184810,
+          "intensity": 1
+        },
+        {
+          "uuid": "814BA1FC-FB53-4A93-90DA-F627F73260CF",
+          "type": "DirectionalLight",
+          "name": "Directional Light",
+          "castShadow": true,
+          "layers": 1,
+          "matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.6759616736116877, 18.151760975599643, -20.57803208416634, 1],
+          "color": 7368816,
+          "intensity": 0.9,
+          "shadow": {
+            "bias": -0.004,
+            "mapSize": [2048, 2048],
+            "camera": {
+              "uuid": "4DFB580F-6662-4570-A81D-8EAB16C207D0",
+              "type": "OrthographicCamera",
+              "layers": 1,
+              "zoom": 1,
+              "left": -13.72405511461967,
+              "right": 13.72405511461967,
+              "top": 13.72405511461967,
+              "bottom": -13.72405511461967,
+              "near": 10.909828115165716,
+              "far": 38.357938344405056
+            }
+          }
+        },
+        {
+          "uuid": "428144B0-73D1-4C15-88F0-02C158B493F8",
+          "type": "SpotLight",
+          "name": "Spot Light",
+          "layers": 1,
+          "matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1],
+          "color": 16777215,
+          "intensity": 1,
+          "distance": 0,
+          "angle": 1.0471975511965976,
+          "decay": 1,
+          "penumbra": 0,
+          "shadow": {
+            "camera": {
+              "uuid": "F82C3DE6-C805-41F3-B6E3-28AEDD2E0433",
+              "type": "PerspectiveCamera",
+              "layers": 1,
+              "fov": 50,
+              "zoom": 1,
+              "near": 0.5,
+              "far": 500,
+              "focus": 10,
+              "aspect": 1,
+              "filmGauge": 35,
+              "filmOffset": 0
+            }
+          }
         }
       ],
       "background": 11184810
