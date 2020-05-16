@@ -4,8 +4,7 @@
 
 import * as THREE from '../../build/three.module.js';
 
-import { UIPanel, UIText, UIImage } from './libs/ui.js';
-import { UIBoolean } from './libs/ui.three.js';
+import { UIPanel, UIText } from './libs/ui.js';
 
 var MenubarStatus = function ( editor ) {
 
@@ -13,34 +12,6 @@ var MenubarStatus = function ( editor ) {
 
 	var container = new UIPanel();
 	container.setClass( 'menu right' );
-
-  var autosave = new UIBoolean( editor.config.getKey( 'autosave' ), strings.getKey( 'menubar/status/autosave' ) );
-	autosave.onChange( function () {
-
-		var value = this.getValue();
-
-		editor.config.setKey( 'autosave', value );
-
-		if ( value === true ) {
-
-			editor.signals.sceneGraphChanged.dispatch();
-
-		}
-
-	} );
-	container.add( autosave );
-
-	editor.signals.savingStarted.add( function () {
-
-		autosave.text.setTextDecoration( 'underline' );
-
-	} );
-
-	editor.signals.savingFinished.add( function () {
-
-		autosave.text.setTextDecoration( 'none' );
-
-	} );
   
   var credits = new UIText( 'powered by' );
 	credits.setClass( 'title' );

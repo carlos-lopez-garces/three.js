@@ -61,8 +61,6 @@ var Strings = function ( config ) {
 			'menubar/add/perspectivecamera': 'PerspectiveCamera',
 			'menubar/add/orthographiccamera': 'OrthographicCamera',
 
-			'menubar/status/autosave': 'autosave',
-
 			'menubar/play': 'Play',
 			'menubar/play/stop': 'Stop',
 			'menubar/play/play': 'Play',
@@ -299,7 +297,8 @@ var Strings = function ( config ) {
 			'sidebar/project/materials': 'Materials',
 			'sidebar/project/Assign': 'Assign',
 
-			'sidebar/settings': 'Settings',
+      'sidebar/settings': 'Settings',
+      'sidebar/settings/autosave': 'Autosave',
 			'sidebar/settings/language': 'Language',
 			'sidebar/settings/exportPrecision': 'Export Precision',
 
@@ -376,8 +375,6 @@ var Strings = function ( config ) {
 			'menubar/add/ambientlight': 'Lumière ambiante',
 			'menubar/add/perspectivecamera': 'Caméra perspective',
 			'menubar/add/orthographiccamera': 'Caméra orthographique',
-
-			'menubar/status/autosave': 'enregistrement automatique',
 
 			'menubar/play': 'Jouer',
 			'menubar/play/stop': 'Arrêter',
@@ -615,7 +612,8 @@ var Strings = function ( config ) {
 			'sidebar/project/materials': 'Matériaux',
 			'sidebar/project/Assign': 'Attribuer',
 
-			'sidebar/settings': 'Paramètres',
+      'sidebar/settings': 'Paramètres',
+      'sidebar/settings/autosave': 'Enregistrement automatique',
 			'sidebar/settings/language': 'Langue',
 			'sidebar/settings/exportPrecision': 'Précision à l\'exportation',
 
@@ -692,8 +690,6 @@ var Strings = function ( config ) {
 			'menubar/add/ambientlight': '环境光',
 			'menubar/add/perspectivecamera': '透视相机',
 			'menubar/add/orthographiccamera': '正交相机',
-
-			'menubar/status/autosave': '自动保存',
 
 			'menubar/play': '启动',
 			'menubar/play/stop': '暂停',
@@ -905,7 +901,8 @@ var Strings = function ( config ) {
 			'sidebar/project/materials': '材质',
 			'sidebar/project/Assign': '应用',
 
-			'sidebar/settings': '设置',
+      'sidebar/settings': '设置',
+      'sidebar/settings/autosave': '自动保存',
 			'sidebar/settings/language': '语言',
 			'sidebar/settings/exportPrecision': '输出精度',
 

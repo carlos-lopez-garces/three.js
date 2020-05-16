@@ -34,11 +34,11 @@ var UITexture = function ( mapping ) {
 	form.appendChild( input );
 
 	var canvas = document.createElement( 'canvas' );
-	canvas.width = 32;
-	canvas.height = 16;
+	canvas.width = 64;
+	canvas.height = 64;
 	canvas.style.cursor = 'pointer';
 	canvas.style.marginRight = '5px';
-	canvas.style.border = '1px solid #888';
+	canvas.style.border = '1px dotted #fff';
 	canvas.addEventListener( 'click', function () {
 
 		input.click();
