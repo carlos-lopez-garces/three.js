@@ -68,10 +68,10 @@
           setRandomColor();
       };
       this.grass = function () {
-        setTexture(grassTexture);
+        setTerrainTexture(grassTexture);
       };
       this.soil = function () {
-        setTexture(soilTexture);
+        setTerrainTexture(soilTexture);
       };
   };
 
@@ -163,12 +163,19 @@
       case 'Edit':
           setVisible(true);
           setTerrainOpacity(0.8);
+          setTerrainVisibility(true);
+          break;
+
+      case 'Helper Only':
+          setVisible(true);
+          setTerrainVisibility(false);
           controls.update();
           break;
 
       case 'Render':
           setVisible(false);
           setTerrainOpacity(1.0);
+          setTerrainVisibility(true);
           controls.update();
           break;
 
@@ -176,6 +183,7 @@
 
           setVisible(false);
           setTerrainOpacity(1.0);
+          setTerrainVisibility(true);
 
           options.orbitViewTheta += 0.1;
           if (options.orbitViewTheta >= 360) {
@@ -542,7 +550,7 @@
       }
   }
 
-  function setTexture(texture) {
+  function setTerrainTexture(texture) {
     terrainMaterial.map = texture;
     terrainMaterial.needsUpdate = true;
   }
@@ -550,6 +558,10 @@
   function setTerrainOpacity(opacity) {
     terrainMaterial.opacity = opacity;
     terrainMaterial.needsUpdate = true;
+  }
+
+  function setTerrainVisibility(visible) {
+    terrain.visible = visible;
   }
 
   function showCaseRectangles() {
@@ -583,7 +595,7 @@
       var gui = new dat.GUI();
 
       var f0 = gui.addFolder('View Mode');
-      f0.add(options, 'viewMode', ['Edit', 'Render', 'Orbit']);
+      f0.add(options, 'viewMode', ['Edit', 'Helper Only', 'Render', 'Orbit']);
       f0.add(options, 'orbitViewTheta', 0, 360).listen();
       f0.add(options, 'orbitViewRadius', 100, 500);
 
