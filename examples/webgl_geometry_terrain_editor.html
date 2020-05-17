@@ -28,7 +28,7 @@
   import * as THREE from '../build/three.module.js';
   import { OrbitControls } from './jsm/controls/OrbitControls.js';
 
-  var camera, scene, renderer, light, rectangles = [], terrain, terrainVertices;
+  var camera, scene, renderer, light, rectangles = [], terrain, terrainVertices, soilTexture, grassTexture, terrainMaterial;
 
   var raycaster, INTERSECTED;
   var RAYCASTER_LAYER = 31;
@@ -66,6 +66,12 @@
       };
       this.randomColor = function () {
           setRandomColor();
+      };
+      this.grass = function () {
+        setTexture(grassTexture);
+      };
+      this.soil = function () {
+        setTexture(soilTexture);
       };
   };
 
@@ -156,11 +162,20 @@
       switch (options.viewMode) {
       case 'Edit':
           setVisible(true);
+          setTerrainOpacity(0.8);
           controls.update();
           break;
+
+      case 'Render':
+          setVisible(false);
+          setTerrainOpacity(1.0);
+          controls.update();
+          break;
+
       case 'Orbit':
 
           setVisible(false);
+          setTerrainOpacity(1.0);
 
           options.orbitViewTheta += 0.1;
           if (options.orbitViewTheta >= 360) {
@@ -211,13 +226,21 @@
 
     geometry.computeFaceNormals();
 
-    terrain = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: '#2194ce', opacity: 0.9, transparent: true}));
+    soilTexture = new THREE.TextureLoader().load( "textures/terrain_soil.jpg" );
+    grassTexture = new THREE.TextureLoader().load( "textures/terrain_grass.jpg" );
+    terrainMaterial = new THREE.MeshBasicMaterial({map: soilTexture, opacity: 0.8, transparent: true})
+
+    terrain = new THREE.Mesh(geometry, terrainMaterial);
     terrainVertices = terrain.geometry.attributes.position.array;
-    for (let index = 0; index < rectangles.length; index++) {
-      terrainVertices[(index*3)+1] = rectangles[index].position.y + RECT_HEIGHT/2 + 1;
-    }
+    setInitialTerrainPosition();
 
     parent.add( terrain );
+  }
+
+  function setInitialTerrainPosition() {
+    for (let index = 0; index < rectangles.length; index++) {
+      terrainVertices[(index*3)+1] = RECT_HEIGHT/2 + 1;
+    }
   }
 
   function populateRectangles(parent) {
@@ -519,6 +542,16 @@
       }
   }
 
+  function setTexture(texture) {
+    terrainMaterial.map = texture;
+    terrainMaterial.needsUpdate = true;
+  }
+
+  function setTerrainOpacity(opacity) {
+    terrainMaterial.opacity = opacity;
+    terrainMaterial.needsUpdate = true;
+  }
+
   function showCaseRectangles() {
       for (var i = 0; i < rectangles.length; i++) {
           TweenMax.to(rectangles[i].position, 1 + Math.random() * 1.5, {
@@ -538,17 +571,19 @@
   function reset() {
       for (var i = 0; i < rectangles.length; i++) {
           TweenMax.to(rectangles[i].position, 1 + Math.random() * 1, {
-              y: -155,
+              y: 0,
               ease: Elastic.easeOut,
           });
       }
+      setInitialTerrainPosition();
+      terrain.geometry.attributes.position.needsUpdate = true;
   }
 
   function setUpGUI() {
       var gui = new dat.GUI();
 
       var f0 = gui.addFolder('View Mode');
-      f0.add(options, 'viewMode', ['Edit', 'Texture', 'Orbit']);
+      f0.add(options, 'viewMode', ['Edit', 'Render', 'Orbit']);
       f0.add(options, 'orbitViewTheta', 0, 360).listen();
       f0.add(options, 'orbitViewRadius', 100, 500);
 
@@ -562,13 +597,17 @@
       });
       f1.add(options, 'blurMagnitude', .10, .15);
 
-      var f2 = gui.addFolder('Lighting');
-      f2.add(options, 'toggleShadow');
+      var f2 = gui.addFolder('Textures');
+      f2.add(options, 'grass');
+      f2.add(options, 'soil');
 
-      var f3 = gui.addFolder('Color');
-      f3.addColor(options, 'color0').name('Color');
-      f3.add(options, 'singleColor');
-      f3.add(options, 'randomColor');
+      var f3 = gui.addFolder('Lighting');
+      f3.add(options, 'toggleShadow');
+
+      var f4 = gui.addFolder('Color');
+      f4.addColor(options, 'color0').name('Color');
+      f4.add(options, 'singleColor');
+      f4.add(options, 'randomColor');
 
       gui.add(options, 'reset').name('Reset');
   }
