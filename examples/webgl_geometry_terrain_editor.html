@@ -28,7 +28,7 @@
   import * as THREE from '../build/three.module.js';
   import { OrbitControls } from './jsm/controls/OrbitControls.js';
 
-  var camera, scene, renderer, light, rectangles = [], rectanglesGroup, terrain, terrainVertices;
+  var camera, scene, renderer, light, rectangles = [], terrain, terrainVertices;
 
   var raycaster, INTERSECTED;
   var RAYCASTER_LAYER = 31;
@@ -107,8 +107,6 @@
       raycaster.layers.set(RAYCASTER_LAYER);
       controls = new OrbitControls(camera, renderer.domElement);
       rectangles = [];
-      rectanglesGroup = new THREE.Group();
-      scene.add(rectanglesGroup);
 
       // LIGHTS
       var ambient = new THREE.AmbientLight(0x444444);
@@ -127,7 +125,7 @@
 
       scene.add(light);
 
-      populateRectangles(rectanglesGroup);
+      populateRectangles(scene);
       // showCaseRectangles();
 
       generateTerrain(scene);
