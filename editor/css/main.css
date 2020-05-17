@@ -588,7 +588,7 @@ select:hover {
 
   button.selected {
     color: #fff;
-    background-color: #08f;
+    background-color: #5097e3;
   }
 
   input,
@@ -695,7 +695,11 @@ select:hover {
   }
 
   #toolbar {
-    background-color: #111;
+    background-color: #247DDC;
+  }
+
+  #toolbar .Panel {
+    color: #fff;
   }
 
   .Outliner {
