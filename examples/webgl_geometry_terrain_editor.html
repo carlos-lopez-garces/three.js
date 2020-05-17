@@ -31,6 +31,7 @@
   var camera, scene, renderer, light, rectangles = [];
 
   var raycaster, INTERSECTED;
+  var RAYCASTER_LAYER = 31;
   var mouse, controls, stats;
   var container;
 
@@ -103,6 +104,7 @@
       scene = new THREE.Scene();
       mouse = new THREE.Vector2();
       raycaster = new THREE.Raycaster();
+      raycaster.layers.set(RAYCASTER_LAYER);
       controls = new OrbitControls(camera, renderer.domElement);
       rectangles = [];
 
@@ -185,22 +187,29 @@
   function generateTerrain(parent) {
     var worldWidth = 256, worldDepth = 256;
 
-    var geometry = new THREE.PlaneBufferGeometry( NUM_CUBES, NUM_CUBES);
-		geometry.rotateX( - Math.PI / 2 );
+    var geometry = new THREE.PlaneBufferGeometry( (GRID_SIZE-1)*RECT_SIZE, (GRID_SIZE-1)*RECT_SIZE, GRID_SIZE-1, GRID_SIZE-1);
+    geometry.rotateX( - Math.PI / 2 );
+    geometry.rotateY( 2 * Math.PI);
 
-		// var vertices = geometry.attributes.position.array;
+		var vertices = geometry.attributes.position.array;
 
-		// for ( var i = 0, j = 0, l = vertices.length; i < l; i ++, j += 3 ) {
+		for ( var i = 0, j = 0, l = vertices.length; i < l; i ++, j += 3 ) {
 
-		// 	vertices[ j + 1 ] = data[ i ] * 10;
+      // vertices[ j + 1 ] = data[ i ] * 10;
 
-		// }
+    }
+    
+    console.log("plane has # vertices", vertices.length/3);
+    console.log("there are # cubes", NUM_CUBES);
+    console.log("there are # grid", GRID_SIZE);
+    console.log("first surface point coord", vertices[0], vertices[1], vertices[2]);
+    console.log("first rectangle coord", rectangles[0].position, rectangles[0].position, rectangles[0].position);
 
     geometry.computeFaceNormals();
 
     var mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: '#2194ce'}));
 
-    // parent.add( mesh );
+    parent.add( mesh );
   }
 
   function populateRectangles(parent) {
@@ -233,6 +242,8 @@
           rectangle.castShadow = options.castShadow;
           rectangle.receiveShadow = options.castShadow;
           rectangles.push(rectangle);
+
+          rectangle.layers.enable(RAYCASTER_LAYER);
 
           parent.add(rectangle);
       }
