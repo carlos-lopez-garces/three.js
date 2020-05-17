@@ -47,7 +47,7 @@
 
   var guiOption = function () {
       this.color0 = "#ffae23";
-      this.viewMode = 'Orbital Control';
+      this.viewMode = 'Edit';
       this.brushType = 'Gaussian';
       this.brushSize = 1.0;
       this.brushMagnitude = 1;
@@ -154,10 +154,13 @@
 
       // View Mode
       switch (options.viewMode) {
-      case 'Orbital Control':
+      case 'Edit':
+          setVisible(true);
           controls.update();
           break;
-      case 'Orbit Mode':
+      case 'Orbit':
+
+          setVisible(false);
 
           options.orbitViewTheta += 0.1;
           if (options.orbitViewTheta >= 360) {
@@ -510,6 +513,12 @@
       }
   }
 
+  function setVisible(visible) {
+      for (var i = 0; i < rectangles.length; i++) {
+          rectangles[i].visible = visible;
+      }
+  }
+
   function showCaseRectangles() {
       for (var i = 0; i < rectangles.length; i++) {
           TweenMax.to(rectangles[i].position, 1 + Math.random() * 1.5, {
@@ -539,7 +548,7 @@
       var gui = new dat.GUI();
 
       var f0 = gui.addFolder('View Mode');
-      f0.add(options, 'viewMode', ['Orbital Control', 'Orbit Mode', 'Stationary Mode']);
+      f0.add(options, 'viewMode', ['Edit', 'Texture', 'Orbit']);
       f0.add(options, 'orbitViewTheta', 0, 360).listen();
       f0.add(options, 'orbitViewRadius', 100, 500);
 
