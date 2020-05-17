@@ -17,7 +17,7 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/stats.js/r11/Stats.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js'></script>
-<script src='https://cdpn.io/jamwjam/pen/VYoqZj.js'></script>
+<!-- <script src='https://cdpn.io/jamwjam/pen/VYoqZj.js'></script> -->
 <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.16.1/TweenMax.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.16.1/TimelineLite.min.js'></script><script  src="./script.js"></script>
 
@@ -28,7 +28,7 @@
   import * as THREE from '../build/three.module.js';
   import { OrbitControls } from './jsm/controls/OrbitControls.js';
 
-  var camera, scene, renderer, light, rectangles = [];
+  var camera, scene, renderer, light, rectangles = [], rectanglesGroup, terrain, terrainVertices;
 
   var raycaster, INTERSECTED;
   var RAYCASTER_LAYER = 31;
@@ -47,10 +47,10 @@
 
   var guiOption = function () {
       this.color0 = "#ffae23";
-      this.viewMode = 'Orbit Mode';
+      this.viewMode = 'Orbital Control';
       this.brushType = 'Gaussian';
       this.brushSize = 1.0;
-      this.brushMagnitude = 30;
+      this.brushMagnitude = 1;
       this.blurMagnitude = 0.13;
       this.orbitViewRadius = 400;
       this.orbitViewTheta = 0;
@@ -107,6 +107,8 @@
       raycaster.layers.set(RAYCASTER_LAYER);
       controls = new OrbitControls(camera, renderer.domElement);
       rectangles = [];
+      rectanglesGroup = new THREE.Group();
+      scene.add(rectanglesGroup);
 
       // LIGHTS
       var ambient = new THREE.AmbientLight(0x444444);
@@ -125,8 +127,8 @@
 
       scene.add(light);
 
-      populateRectangles(scene);
-      showCaseRectangles();
+      populateRectangles(rectanglesGroup);
+      // showCaseRectangles();
 
       generateTerrain(scene);
 
@@ -189,27 +191,32 @@
 
     var geometry = new THREE.PlaneBufferGeometry( (GRID_SIZE-1)*RECT_SIZE, (GRID_SIZE-1)*RECT_SIZE, GRID_SIZE-1, GRID_SIZE-1);
     geometry.rotateX( - Math.PI / 2 );
-    geometry.rotateY( 2 * Math.PI);
+    geometry.rotateY( Math.PI / 2 );
 
-		var vertices = geometry.attributes.position.array;
-
-		for ( var i = 0, j = 0, l = vertices.length; i < l; i ++, j += 3 ) {
-
-      // vertices[ j + 1 ] = data[ i ] * 10;
-
-    }
-    
-    console.log("plane has # vertices", vertices.length/3);
-    console.log("there are # cubes", NUM_CUBES);
-    console.log("there are # grid", GRID_SIZE);
-    console.log("first surface point coord", vertices[0], vertices[1], vertices[2]);
-    console.log("first rectangle coord", rectangles[0].position, rectangles[0].position, rectangles[0].position);
+    // console.log("plane has # vertices", vertices.length/3);
+    // console.log("there are # cubes", NUM_CUBES);
+    // console.log("there are # grid", GRID_SIZE);
+    // console.log("surface corner 1", vertices[0], vertices[2]);
+    // const corner2 = (GRID_SIZE-2)*3;
+    // console.log("surface corner 2", vertices[corner2], vertices[corner2+2]);
+    // const corner3 = 2*(GRID_SIZE-2)*3;
+    // console.log("surface corner 3", vertices[corner3], vertices[corner3+2]);
+    // const corner4 = 3*(GRID_SIZE-2)*3;
+    // console.log("surface corner 4", vertices[corner4], vertices[corner4+2]);
+    // console.log("rectangle 1", rectangles[0].position.x, rectangles[0].position.z);
+    // console.log("rectangle 2", rectangles[GRID_SIZE-1].position.x, rectangles[GRID_SIZE-1].position.z);
+    // console.log("rectangle 3", rectangles[2*(GRID_SIZE-1)].position.x, rectangles[2*(GRID_SIZE-1)].position.z);
+    // console.log("rectangle 4", rectangles[3*(GRID_SIZE-1)].position.x, rectangles[3*(GRID_SIZE-1)].position.z);
 
     geometry.computeFaceNormals();
 
-    var mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: '#2194ce'}));
+    terrain = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: '#2194ce', opacity: 0.9, transparent: true}));
+    terrainVertices = terrain.geometry.attributes.position.array;
+    for (let index = 0; index < rectangles.length; index++) {
+      terrainVertices[(index*3)+1] = rectangles[index].position.y + RECT_HEIGHT/2 + 1;
+    }
 
-    parent.add( mesh );
+    parent.add( terrain );
   }
 
   function populateRectangles(parent) {
@@ -238,7 +245,8 @@
           z = (((GRID_SIZE * RECT_SIZE) / 2) - ((RECT_SIZE) * row) + (RECT_SIZE / 2));
 
           rectangle = new THREE.Mesh(geometry, material);
-          rectangle.position.set(x, -3000, z);
+          // Uncomment to showcase.
+          rectangle.position.set(x, 0, z);
           rectangle.castShadow = options.castShadow;
           rectangle.receiveShadow = options.castShadow;
           rectangles.push(rectangle);
@@ -358,6 +366,9 @@
               if (newRow >= 0 && newRow < GRID_SIZE && newCol >= 0 && newCol < GRID_SIZE) {
                   index = (newRow * GRID_SIZE) + newCol;
                   rectangles[index].position.y += gFilter[fIndex];
+                  
+                  terrainVertices[(index*3)+1] = rectangles[index].position.y + RECT_HEIGHT/2 + 1;
+                  terrain.geometry.attributes.position.needsUpdate = true;
               }
               fIndex += 1;
           }
@@ -375,6 +386,8 @@
       if (sigma < 0.6) {
           index = (row * GRID_SIZE) + col;
           rectangles[index].position.y += magnitude;
+          terrainVertices[(index*3)+1] = rectangles[index].position.y + RECT_HEIGHT/2 + 1;
+          terrain.geometry.attributes.position.needsUpdate = true;
       } else {
           for (var i = -fWidth; i <= fWidth; i++) {
               for (var j = -fWidth; j <= fWidth; j++) {
@@ -384,6 +397,8 @@
                   if (newRow >= 0 && newRow < GRID_SIZE && newCol >= 0 && newCol < GRID_SIZE) {
                       index = (newRow * GRID_SIZE) + newCol;
                       rectangles[index].position.y += magnitude / 6;
+                      terrainVertices[(index*3)+1] = rectangles[index].position.y + RECT_HEIGHT/2 + 1;
+                      terrain.geometry.attributes.position.needsUpdate = true;
                   }
               }
           }
@@ -418,6 +433,8 @@
       }
       //console.log(sum);
       rectangles[index].position.y = sum - 255;
+      terrainVertices[(index*3)+1] = rectangles[index].position.y + RECT_HEIGHT/2 + 1;
+      terrain.geometry.attributes.position.needsUpdate = true;
   }
 
 
@@ -531,10 +548,10 @@
       var f1 = gui.addFolder('Brush');
       f1.add(options, 'brushType', ['Gaussian', 'Pinpoint', 'Blur', 'Color']);
       f1.add(options, 'brushSize', .5, 2).onChange(function (value) {
-          brushSize = value;
+          options.brushSize = value;
       });
       f1.add(options, 'brushMagnitude', -40, 40).onChange(function (value) {
-          brushMagnitude = value;
+          options.brushMagnitude = value;
       });
       f1.add(options, 'blurMagnitude', .10, .15);
 
